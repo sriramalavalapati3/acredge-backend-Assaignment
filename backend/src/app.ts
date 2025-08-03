@@ -4,6 +4,8 @@ import { RouteConfig } from './types';
 import { config } from 'dotenv';
 config(); 
 import Database from './database/db';
+import { errorHandler } from './modules/Application/application-error-handlers';
+import { UserRouter } from './modules/user';
 
 class App {
     private static app: Application;
@@ -15,7 +17,8 @@ class App {
         this.app.use(express.json());
         this.app.use(cors());
 
-        this.app.use('/api', this.createApiServer())
+        this.app.use('/api', this.createApiServer());
+        this.app.use(errorHandler as express.ErrorRequestHandler);
 
         this.app.get('/', (req, res) => {
             res.send('Welcome to the API!');
@@ -29,7 +32,12 @@ class App {
 
      private static createApiServer(): Application {
     const app: Application = express();
-    const routes: RouteConfig[] = [];
+    const routes: RouteConfig[] = [
+        {
+            path: '/account',
+            router: new UserRouter().router
+        }
+    ];
 
     routes.forEach(route => {
       app.use(route.path, route.router);
