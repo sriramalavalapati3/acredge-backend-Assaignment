@@ -25,13 +25,13 @@ cd acredge-backend-Assaignment/backend
 
 2. Create .env file
 Create a .env file inside the backend folder and paste the required environment variables:
+
+
 ```
 PORT=8080
 MONGO_URI=mongodb://localhost:27017/realestate
 REDIS_URL=redis://localhost:6379
 ELASTICSEARCH_NODE=http://localhost:9200
-
-```
 
 3. Start Services via Docker
 This project uses Redis and Elasticsearch via Docker Compose. Start them with:
