@@ -69,7 +69,7 @@ These enums define the types and status of properties you can create or query.
 ts
 Copy
 Edit
-```
+
 export enum PropertyType {
   Residential = 'Residential',
   Commercial = 'Commercial',
