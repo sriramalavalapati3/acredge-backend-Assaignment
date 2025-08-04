@@ -42,7 +42,6 @@ export const authMiddleware = (
       401
     );
     }
-
     req.userId = authPayload.userId;
     req.role = authPayload.role!;
 

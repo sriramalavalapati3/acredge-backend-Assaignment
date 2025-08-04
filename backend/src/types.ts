@@ -1,4 +1,5 @@
 import express from 'express';
+import { Request } from 'express';
 
 export interface RouteConfig {
     path: string;
@@ -8,4 +9,11 @@ export interface RouteConfig {
 export enum Role {
     ADMIN = 'admin',
     USER = 'user'
+}
+
+declare module 'express-serve-static-core' {
+  interface Request {
+    userId?: string;
+    role: string;
+  }
 }

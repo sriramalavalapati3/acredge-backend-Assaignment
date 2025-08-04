@@ -4,6 +4,15 @@ import { searchQueryParams, updatePropertyParams } from "./types";
 
 const PROPERTY_INDEX = 'properties';
 
+const getCleanSuggestInputs = (propertyData: property) => {
+  return [
+    propertyData.title,
+    propertyData.location.city,
+    propertyData.location.locality,
+    ...(propertyData.amenities || [])
+  ].filter(item => item != null && item !== ''); // Remove null/empty values
+};
+
 // Index a property document in Elasticsearch
 export const indexProperty = async (propertyData: property) => {
   await esClient.index({
@@ -20,12 +29,7 @@ export const indexProperty = async (propertyData: property) => {
       status: propertyData.status,
       amenities: propertyData.amenities || [],
       suggest: {
-        input: [
-          propertyData.title,
-          propertyData.location.city,
-          propertyData.location.locality,
-          ...(propertyData.amenities || []),
-        ],
+        input: getCleanSuggestInputs(propertyData),
       },
     },
   });
@@ -47,12 +51,7 @@ export const updatePropertyInElasticServer = async (propertyData: property) => {
       status: propertyData.status,
       amenities: propertyData.amenities || [],
       suggest: {
-        input: [
-          propertyData.title,
-          propertyData.location.city,
-          propertyData.location.locality,
-          ...(propertyData.amenities || []),
-        ],
+        input: getCleanSuggestInputs(propertyData),
       },
     },
   });
