@@ -1,51 +1,59 @@
 # 🏠 Real Estate Listing Platform (Backend)
 
-This project is a backend service for a real estate listing platform. It uses **Express.js**, **TypeScript**, **Redis**, **Elasticsearch**, and **MongoDB** for building scalable, efficient search and listing functionality.
+This is a backend service for a real estate listing platform that supports creating, storing, and searching property listings. It is built using **Node.js**, **TypeScript**, **MongoDB**, **Elasticsearch**, and **Redis**, and uses **Docker** for containerization of services like Redis and Elasticsearch.
 
 ---
 
-## 🔧 Tech Stack
+## ⚙️ Tech Stack
 
-- **Node.js + Express**
+- **Node.js** + **Express.js**
 - **TypeScript**
-- **MongoDB** (via Mongoose)
-- **Elasticsearch** (for property search)
-- **Redis** (for rate limiting and caching)
-- **Docker** (for Redis & Elasticsearch in local development)
+- **MongoDB** with Mongoose
+- **Redis** – for caching and optimization
+- **Elasticsearch** – for full-text property search
+- **Docker** – for running Redis and Elasticsearch locally
 
 ---
 
-## 🚀 Setup Instructions
+## 🚀 Getting Started
 
-### 1. Clone the Repository
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/sriramalavalapati3/acredge-backend-Assaignment.git
 cd acredge-backend-Assaignment/backend
+2. Set up environment variables
+Create a .env file inside the backend folder and add the following:
 
-2. Create .env file
-Create a .env file inside the backend folder and paste the required environment variables:
-
-
-```
+env
+Copy
+Edit
 PORT=8080
 MONGO_URI=mongodb://localhost:27017/realestate
 REDIS_URL=redis://localhost:6379
 ELASTICSEARCH_NODE=http://localhost:9200
-
-3. Start Services via Docker
-This project uses Redis and Elasticsearch via Docker Compose. Start them with:
+3. Run Redis and Elasticsearch using Docker
+Make sure you have Docker installed. Then run:
 
 bash
 Copy
 Edit
 docker-compose up -d
-Make sure Docker is installed and running.
+This will spin up local containers for Redis and Elasticsearch.
 
-4. Start the Server
+4. Install dependencies and start the development server
 bash
 Copy
 Edit
 npm install
 npm run dev
-The server will run on http://localhost:8080.
+The backend server will start at: http://localhost:8080
+
+☁️ Optional: Use Cloud Services
+Instead of running Redis and Elasticsearch locally via Docker, you can use managed cloud services:
+
+Redis Cloud – https://redis.com/redis-enterprise-cloud/
+
+Elastic Cloud – https://www.elastic.co/cloud/
+
+Update your .env file to point to the respective cloud URLs.
