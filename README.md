@@ -57,3 +57,44 @@ Redis Cloud – https://redis.com/redis-enterprise-cloud/
 Elastic Cloud – https://www.elastic.co/cloud/
 
 Update your .env file to point to the respective cloud URLs.
+
+📄 API Documentation
+You can view and test all available endpoints using this Postman Collection:
+
+🔗 Postman Docs
+
+🏷️ Supported Property Types & Status
+These enums define the types and status of properties you can create or query.
+
+ts
+Copy
+Edit
+```
+export enum PropertyType {
+  Residential = 'Residential',
+  Commercial = 'Commercial',
+  TwoBHK = '2BHK',
+  ThreeBHK = '3BHK',
+}
+
+export enum PropertyStatus {
+  ForSale = 'For Sale',
+  ForRent = 'For Rent',
+}
+📌 Example Property Object
+ts
+Copy
+Edit
+interface Property extends Document {
+  title: string;
+  location: {
+    city: string;
+    locality: string;
+    sector?: string;
+  };
+  type: PropertyType;
+  price: number;
+  area: number;
+  status: PropertyStatus;
+  amenities?: string[];
+}
