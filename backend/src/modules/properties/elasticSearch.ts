@@ -66,7 +66,9 @@ export const deletePropertyFromElasticServer = async (propertyId: string) => {
 };
 
 // indexer.ts - searchProperties function
-export const searchProperties = async (params: searchQueryParams): Promise<{
+export const searchProperties = async (
+  params: searchQueryParams
+): Promise<{
   data: any[];
   total: number;
   page: number;
@@ -81,57 +83,45 @@ export const searchProperties = async (params: searchQueryParams): Promise<{
     status,
     page = 1,
   } = params;
-  
+
   const DEFAULT_LIMIT = 15;
   const must: any[] = [];
-  const should: any[] = [];
   const filter: any[] = [];
 
-  // Handle search query
   if (query) {
-    should.push(
-      {
-        match: {
-          title: {
-            query,
-            boost: 3,
-            fuzziness: 'AUTO'
-          }
-        }
-      },
-      {
-        match: {
-          'city.autocomplete': {
-            query,
-            boost: 2,
-            fuzziness: 'AUTO'
-          }
-        }
-      },
-      {
-        match: {
-          'locality.autocomplete': {
-            query,
-            fuzziness: 'AUTO'
-          }
-        }
+    must.push({
+      match_phrase: {
+        title: query
       }
-    );
-    must.push({ bool: { should } });
+    });
   }
 
-  // Handle filters - using keyword fields for exact matching
-  if (city) filter.push({ term: { 'city.keyword': city.toLowerCase() } });
-  if (propertyType) filter.push({ term: { 'type.keyword': propertyType } });
-  if (status) filter.push({ term: { 'status.keyword': status } });
-  
+  if (city) {
+    filter.push({
+      term: { 'city.keyword': city.toLowerCase() }
+    });
+  }
+
+  if (propertyType) {
+    filter.push({
+      term: { 'type.keyword': propertyType }
+    });
+  }
+
+  if (status) {
+    filter.push({
+      term: { 'status.keyword': status }
+    });
+  }
+
   if (minPrice !== undefined || maxPrice !== undefined) {
+    const priceRange: any = {};
+    if (minPrice !== undefined) priceRange.gte = minPrice;
+    if (maxPrice !== undefined) priceRange.lte = maxPrice;
+
     filter.push({
       range: {
-        price: {
-          ...(minPrice !== undefined && { gte: minPrice }),
-          ...(maxPrice !== undefined && { lte: maxPrice }),
-        },
+        price: priceRange,
       },
     });
   }
@@ -161,21 +151,21 @@ export const searchProperties = async (params: searchQueryParams): Promise<{
           },
         },
         property_types: {
-          terms: { 
-            field: 'type.keyword',  // Use keyword field for aggregation
-            size: 10  // Limit number of buckets returned
+          terms: {
+            field: 'type.keyword',
+            size: 10,
           },
         },
         cities: {
-          terms: { 
+          terms: {
             field: 'city.keyword',
-            size: 10
+            size: 10,
           },
         },
         statuses: {
-          terms: { 
-            field: 'status.keyword',  // Use keyword field for aggregation
-            size: 10
+          terms: {
+            field: 'status.keyword',
+            size: 10,
           },
         },
       },
@@ -183,18 +173,18 @@ export const searchProperties = async (params: searchQueryParams): Promise<{
   });
 
   // Handle different Elasticsearch response formats for total hits
-  const total = typeof result.hits.total === 'number' 
-    ? result.hits.total 
-    : result.hits.total?.value ?? 0;
+  const total =
+    typeof result.hits.total === 'number'
+      ? result.hits.total
+      : result.hits.total?.value ?? 0;
 
   return {
     data: result.hits.hits.map((hit: any) => ({
       ...hit._source,
-      id: hit._id
+      id: hit._id,
     })),
     total,
     page,
     limit: DEFAULT_LIMIT,
   };
 };
-
