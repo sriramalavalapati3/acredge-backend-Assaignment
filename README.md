@@ -61,7 +61,7 @@ Update your .env file to point to the respective cloud URLs.
 📄 API Documentation
 You can view and test all available endpoints using this Postman Collection:
 
-🔗 Postman Docs
+🔗 Postman Docs(https://documenter.getpostman.com/view/47283622/2sB3BANYUX)
 
 🏷️ Supported Property Types & Status
 These enums define the types and status of properties you can create or query.
